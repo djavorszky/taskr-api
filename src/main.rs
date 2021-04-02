@@ -4,11 +4,16 @@
 #[macro_use]
 extern crate rocket;
 
+use rocket_contrib::serve::StaticFiles;
+
 #[get("/hello/<name>")]
 fn hello(name: String) -> String {
     format!("Hello, {}", name)
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![hello]).launch();
+    rocket::ignite()
+        .mount("/", routes![hello])
+        .mount("/res", StaticFiles::from("resources"))
+        .launch();
 }
