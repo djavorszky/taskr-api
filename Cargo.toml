@@ -9,3 +9,5 @@ edition = "2018"
 [dependencies]
 rocket = "0.4.7"
 rocket_contrib = "0.4.7"
+regex = "1.4.5"
+lazy_static = "1.4.0"
