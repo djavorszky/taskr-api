@@ -3,24 +3,47 @@
 use regex::Regex;
 
 pub fn capitalize<T: AsRef<str>>(val: T) -> String {
+    let text = val.as_ref();
+
+    if text.is_empty() {
+        return String::new();
+    }
+
     let mut is_prev_whitespace = true;
+    let mut prev_capital_char_idx = 0;
+    let mut prev_capital_char_size = 1;
 
-    val.as_ref()
-        .chars()
-        .map(|c| {
-            if c.is_whitespace() {
-                is_prev_whitespace = true;
+    let mut result = String::with_capacity(text.len());
 
-                c.to_string()
-            } else if is_prev_whitespace {
-                is_prev_whitespace = false;
-
-                c.to_uppercase().collect::<String>()
-            } else {
-                c.to_string()
+    for (idx, c) in text.chars().enumerate() {
+        if c.is_whitespace() {
+            if !is_prev_whitespace {
+                result.push_str(&text[prev_capital_char_idx + prev_capital_char_size..idx])
             }
-        })
-        .collect()
+
+            is_prev_whitespace = true;
+
+            result.push(c);
+            continue;
+        }
+
+        if is_prev_whitespace {
+            is_prev_whitespace = false;
+
+            let capital = c.to_uppercase().collect::<String>();
+
+            prev_capital_char_idx = idx;
+            prev_capital_char_size = capital.len();
+
+            result.push_str(capital.as_str());
+        }
+    }
+
+    if !text.chars().rev().next().unwrap().is_whitespace() {
+        result.push_str(&text[prev_capital_char_idx + prev_capital_char_size..]);
+    }
+
+    result
 }
 
 const WORD_WITH_BOUNDARIES_REGEX: &str = "(\\w+)(\\s*[.?!]*)";
