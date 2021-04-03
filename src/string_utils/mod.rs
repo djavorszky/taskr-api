@@ -1,3 +1,5 @@
+#![allow(soft_unstable)]
+
 use regex::Regex;
 
 pub fn capitalize<T: AsRef<str>>(val: T) -> String {
@@ -47,7 +49,10 @@ pub fn capitalize_regex<T: AsRef<str>>(val: T) -> String {
 
 #[cfg(test)]
 mod tests {
+    extern crate test;
+
     use super::*;
+    use test::Bencher;
 
     #[test]
     fn test_capitalize_empty() {
@@ -203,5 +208,19 @@ mod tests {
             "What\n\tA\t\nWonderful \r\n World \n   \t  ".to_string(),
             capitalize_regex("what\n\ta\t\nwonderful \r\n world \n   \t  ")
         );
+    }
+
+    #[bench]
+    fn bench_capitalize(b: &mut Bencher) {
+        let test_sentence = "what a wonderful world!";
+
+        b.iter(|| capitalize(test_sentence));
+    }
+
+    #[bench]
+    fn bench_capitalize_regex(b: &mut Bencher) {
+        let test_sentence = "what a wonderful world!";
+
+        b.iter(|| capitalize_regex(test_sentence));
     }
 }
