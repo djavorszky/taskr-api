@@ -5,6 +5,9 @@
 #[macro_use]
 extern crate rocket;
 
+#[macro_use]
+extern crate lazy_static;
+
 mod string_utils;
 
 use rocket_contrib::serve::StaticFiles;
