@@ -1,15 +1,15 @@
 pub fn capitalize<T: AsRef<str>>(val: T) -> String {
-    let mut previous_whitespace = true;
+    let mut is_prev_whitespace = true;
 
     val.as_ref()
         .chars()
         .map(|c| {
             if c.is_whitespace() {
-                previous_whitespace = true;
+                is_prev_whitespace = true;
 
                 c.to_string()
-            } else if previous_whitespace == true {
-                previous_whitespace = false;
+            } else if is_prev_whitespace {
+                is_prev_whitespace = false;
 
                 c.to_uppercase().collect::<String>()
             } else {
